@@ -1,0 +1,27 @@
+<table class="table table-striped border">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Nombre</th>
+			<th scope="col">Descripción</th>
+			<th scope="col">Estado</th>
+			<th scope="col"># Productos</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for (category of categories; track category) {
+			<tr>
+				<th scope="row">{{ category.id }}</th>
+				<td>{{ category.name }}</td>
+				<td>{{ category.description }}</td>
+				<td>
+					<dsb-badge-atom 
+						[text]="category.status"
+						[type]="statusMap[category.status]" >
+					</dsb-badge-atom>
+				</td>
+				<td>{{ category.productCount }}</td>
+			</tr>
+		}
+	</tbody>
+</table>
