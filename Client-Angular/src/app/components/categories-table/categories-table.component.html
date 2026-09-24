@@ -4,7 +4,6 @@
 			<th scope="col">Id</th>
 			<th scope="col">Nombre</th>
 			<th scope="col">Descripción</th>
-			<th scope="col">Icono</th>
 			<th scope="col">Estado</th>
 			<th scope="col"># Productos</th>
 		</tr>
@@ -15,9 +14,6 @@
 				<th scope="row">{{ category.id }}</th>
 				<td>{{ category.name }}</td>
 				<td>{{ category.description }}</td>
-				<td>
-					<dsb-icon-atom [icon]="category.icon" [size]="2" ></dsb-icon-atom>
-				</td>
 				<td>
 					<dsb-badge-atom 
 						[text]="category.status"

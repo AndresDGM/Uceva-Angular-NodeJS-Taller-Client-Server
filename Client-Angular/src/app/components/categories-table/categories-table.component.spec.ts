@@ -48,7 +48,7 @@ describe('CategoriesTableComponent', () => {
       expect(columns[0].nativeElement.textContent.trim()).toBe(String(category.id));
       expect(columns[1].nativeElement.textContent.trim()).toBe(category.name);
       expect(columns[2].nativeElement.textContent.trim()).toBe(category.description);
-      expect(columns[5].nativeElement.textContent.trim()).toBe(String(category.productCount));
+      expect(columns[4].nativeElement.textContent.trim()).toBe(String(category.productCount));
     });
   });
 

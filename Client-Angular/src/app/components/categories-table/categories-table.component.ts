@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { BadgeAtom, BadgeType, IconAtom } from '@brejcha13320/design-system-bootstrap';
+import { BadgeAtom, BadgeType } from '@brejcha13320/design-system-bootstrap';
 import { Category, CategoryStatus } from '../../interfaces/categories.interface';
 
 /**
  * Componente de tabla de categorías.
  *
  * Se utiliza para mostrar un listado de categorías en una tabla,
- * mostrando información como id, nombre, descripción, icono, estado
+ * mostrando información como id, nombre, descripción, estado
  * y la cantidad de productos asociados a cada categoría.
  *
  * @remarks
@@ -25,7 +25,7 @@ import { Category, CategoryStatus } from '../../interfaces/categories.interface'
 @Component({
   selector: 'app-categories-table',
   templateUrl: './categories-table.component.html',
-  imports: [BadgeAtom, IconAtom],
+  imports: [BadgeAtom],
 })
 export class CategoriesTableComponent {
   /**
