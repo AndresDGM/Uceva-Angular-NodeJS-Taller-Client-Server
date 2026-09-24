@@ -71,4 +71,42 @@
  *           type: number
  *           example: 4500
  */
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       description: Representa una categoría del sistema
+ *       required:
+ *         - id
+ *         - name
+ *         - description
+ *         - icon
+ *         - status
+ *         - productCount
+ *       properties:
+ *         id:
+ *           type: number
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: Lácteos
+ *         description:
+ *           type: string
+ *           example: Productos derivados de la leche
+ *         icon:
+ *           type: string
+ *           example: bi-box-seam
+ *         status:
+ *           type: string
+ *           enum:
+ *             - Activa
+ *             - Inactiva
+ *           example: Activa
+ *         productCount:
+ *           type: number
+ *           example: 12
+ */
 export {};
