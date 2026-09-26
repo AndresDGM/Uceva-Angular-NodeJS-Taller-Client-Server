@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { UsersPage } from './pages/users/users.page';
 import { ProductsPage } from './pages/products/products.page';
 import { CategoriesPage } from './pages/categories/categories.page';
+import { OrdersPage } from './pages/orders/orders.page';
 
 /**
  * Definición de las rutas principales de la aplicación.
@@ -17,6 +18,8 @@ import { CategoriesPage } from './pages/categories/categories.page';
  *
  * @see {@link UsersPage}
  * @see {@link ProductsPage}
+ * @see {@link CategoriesPage}
+ * @see {@link OrdersPage}
  */
 export const routes: Routes = [
 
@@ -46,6 +49,15 @@ export const routes: Routes = [
    * de mostrar y gestionar el listado de categorías.
    */
   { path: 'categories', component: CategoriesPage },
+
+  /**
+   * Ruta de órdenes.
+   *
+   * @remarks
+   * Renderiza el componente `OrdersPage`, encargado
+   * de mostrar y gestionar el listado de órdenes.
+   */
+  { path: 'orders', component: OrdersPage },
 
   /**
    * Ruta comodín.

@@ -109,4 +109,47 @@
  *           type: number
  *           example: 12
  */
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       description: Representa una orden del sistema
+ *       required:
+ *         - id
+ *         - customerName
+ *         - date
+ *         - total
+ *         - status
+ *         - itemCount
+ *       properties:
+ *         id:
+ *           type: number
+ *           example: 1
+ *         customerName:
+ *           type: string
+ *           example: Juan Pérez
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           example: 2026-09-26T10:30:00.000Z
+ *         total:
+ *           type: number
+ *           example: 250000
+ *         status:
+ *           type: string
+ *           enum:
+ *             - Pendiente
+ *             - Procesando
+ *             - Enviado
+ *             - Entregado
+ *             - Cancelado
+ *           example: Procesando
+ *         itemCount:
+ *           type: number
+ *           example: 3
+ */
+
 export {};
