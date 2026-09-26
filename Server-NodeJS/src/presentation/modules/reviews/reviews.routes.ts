@@ -11,10 +11,34 @@ import { ReviewsController } from "./reviews.controller";
 export class ReviewsRoutes {
 
   /**
-   * Obtiene y configura las rutas de Express para reseñas.
-   *
-   * @returns Enrutador de Express configurado
-   */
+     * @openapi
+     * /api/reviews/{countReviews}:
+     *   get:
+     *     summary: Obtener listado de reviews
+     *     description: Retorna una lista de reviews generados dinámicamente según la cantidad solicitada.
+     *     tags:
+     *       - Reviews
+     *     parameters:
+     *       - in: path
+     *         name: countReviews
+     *         required: true
+     *         schema:
+     *           type: integer
+     *           minimum: 1
+     *           example: 10
+     *         description: Cantidad de reviews a generar
+     *     responses:
+     *       200:
+     *         description: Lista de reviews generados
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 $ref: '#/components/schemas/Review'
+     *       400:
+     *         description: Parámetro inválido
+     */
   static get routes(): Router {
     const router = Router();
     const controller = new ReviewsController();
