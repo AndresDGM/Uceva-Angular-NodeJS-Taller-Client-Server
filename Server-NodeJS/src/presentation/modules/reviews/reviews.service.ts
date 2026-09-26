@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Review } from '../../../domain/interfaces/review.interface';
+import { Review, ReviewsRatings } from '../../../domain/interfaces/review.interface';
 
 /**
  * Servicio encargado de la generación y gestión de reseñas.
@@ -9,6 +9,27 @@ import { Review } from '../../../domain/interfaces/review.interface';
  * ficticias, principalmente con fines de prueba o demostración.
  */
 export class ReviewsService {
+
+  /**
+   * Calificaciones permitidas y disponibles para las reseñas.
+   *
+   * @remarks
+   * Se utilizan para asignar aleatoriamente una puntuación
+   * a cada reseña generada.
+   */
+  private ratings: ReviewsRatings[] = [
+    0,
+    0.5,
+    1,
+    1.5,
+    2,
+    2.5,
+    3,
+    3.5,
+    4,
+    4.5,
+    5
+  ];
 
   /**
    * Obtiene un listado de reseñas generadas dinámicamente.
@@ -42,7 +63,7 @@ export class ReviewsService {
       id,
       productId: faker.number.int({ min: 1, max: 100 }),
       userId: faker.number.int({ min: 1, max: 50 }),
-      rating: faker.number.int({ min: 0, max: 10 }) / 2,
+      rating: faker.helpers.arrayElement(this.ratings),
       comment: faker.lorem.sentence(),
       date: faker.date.recent()
     });

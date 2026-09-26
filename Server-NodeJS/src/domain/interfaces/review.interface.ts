@@ -32,7 +32,7 @@ export interface Review {
     userId: number;
 
     /** Calificación otorgada al producto (por ejemplo de 0 a 5) */
-    rating: number;
+    rating: ReviewsRatings;
 
     /** Comentario u opinión detallada de la reseña */
     comment: string;
@@ -40,3 +40,17 @@ export interface Review {
     /** Fecha en la que fue creada la reseña */
     date: Date;
 }
+
+/**
+ * Tipo que define las calificaciones posibles para una reseña.
+ *
+ * @remarks
+ * Este tipo restringe las puntuaciones a valores numéricos en escala de 0 a 5
+ * con incrementos de 0.5, permitiendo medias estrellas.
+ *
+ * @example
+ * ```ts
+ * const calificacion: ReviewsRatings = 4.5;
+ * ```
+ */
+export type ReviewsRatings = 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
