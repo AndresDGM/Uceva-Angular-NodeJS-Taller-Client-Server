@@ -37,7 +37,7 @@ export class OrdersController {
     setTimeout(() => {
       this.ordersService
         .getAllOrders(Number(countOrders))
-        .then((orders) => res.status(201).json(orders))
+        .then((orders) => res.status(200).json(orders))
         .catch((error) => HandleError.error(error, res));
     }, 3000);
   };
