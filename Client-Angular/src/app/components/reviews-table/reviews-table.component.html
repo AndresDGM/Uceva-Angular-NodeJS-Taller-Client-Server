@@ -1,0 +1,41 @@
+<table class="table table-striped border">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+            <th scope="col">Id del producto</th>
+            <th scope="col">Id del Cliente</th>
+			<th scope="col">Calificacion</th>
+			<th scope="col">Comentario</th>
+			<th scope="col">Fecha</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for (review of reviews; track review) {
+			<tr>
+				<th scope="row">{{ review.id }}</th>
+				<td>{{ review.productId }}</td>
+				<td>{{ review.userId }}</td>
+				<td class="text-nowrap">
+                    <span class="text-warning">
+                        @for (star of stars; track star) {
+                            @if (review.rating >= star) {
+                                <!-- Estrella completa -->
+                                <i class="bi bi-star-fill"></i>
+                            } @else if (review.rating >= star - 0.5) {
+                                <!-- Media estrella -->
+                                <i class="bi bi-star-half"></i>
+                            } @else {
+                                <!-- Estrella vacía -->
+                                <i class="bi bi-star"></i>
+                            }
+                        }
+                    </span>
+                    <!-- Texto opcional con el valor numérico -->
+                    <span class="ms-1 small text-muted">({{ review.rating }})</span>
+                </td>
+                <td>{{ review.comment }}</td>
+                <td>{{ review.date }}</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -152,4 +152,50 @@
  *           example: 3
  */
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Review:
+ *       type: object
+ *       description: Representa una reseña del sistema
+ *       required:
+ *         - id
+ *         - productId
+ *         - userId
+ *         - rating
+ *         - comment
+ *         - date
+ *       properties:
+ *         id:
+ *           type: number
+ *           example: 1
+ *         productId:
+ *           type: number
+ *           example: 1
+ *         userId:
+ *           type: number
+ *           example: 1
+ *         rating:
+ *           type: number
+ *           enum: 
+ *              - 0
+ *              - 0.5
+ *              - 1
+ *              - 1.5
+ *              - 2
+ *              - 2.5
+ *              - 3
+ *              - 3.5
+ *              - 4
+ *              - 4.5
+ *              - 5
+ *         comment:
+ *           type: string
+ *           example: Muy Bueno.
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           example: '2024-02-15T18:30:00.000Z'
+ */
 export {};
