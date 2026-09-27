@@ -1,13 +1,17 @@
 import { Router } from "express";
 import { UsersRoutes } from "./modules/users/users.routes";
 import { ProductsRoutes } from "./modules/products/products.routes";
+import { CategoriesRoutes } from "./modules/categories/categories.routes";
+import { OrdersRoutes } from "./modules/orders/orders.routes";
+import { ReviewsRoutes } from "./modules/reviews/reviews.routes";
 
 /**
  * Clase encargada de centralizar todas las rutas de la aplicación.
  *
  * @remarks
  * Proporciona un único punto de acceso a los endpoints
- * del backend, agrupando los módulos de usuarios y productos.
+ * del backend, agrupando los módulos de usuarios, productos,
+ * categorías y órdenes.
  *
  * @example
  * ```ts
@@ -31,6 +35,9 @@ export class AppRoutes {
     // Definir rutas
     router.use("/api/users", UsersRoutes.routes);
     router.use("/api/products", ProductsRoutes.routes);
+    router.use("/api/categories", CategoriesRoutes.routes);
+    router.use("/api/orders", OrdersRoutes.routes);
+    router.use("/api/reviews", ReviewsRoutes.routes);
 
     return router;
   }
