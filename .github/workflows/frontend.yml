@@ -1,0 +1,76 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches: ["develop"]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Client-Angular/package-lock.json
+
+      # 3. Configurar GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 4. Instalar dependencias
+      - name: Install dependencies
+        working-directory: ./Client-Angular
+        run: npm ci
+
+      # 5. Ejecutar pruebas unitarias
+      - name: Run Unit Tests
+        working-directory: ./Client-Angular
+        run: npm test
+
+      # 6. Generar build de Angular
+      - name: Build Angular
+        working-directory: ./Client-Angular
+        run: npm run build -- --base-href "/${{ github.event.repository.name }}/"
+        
+      # 7. Configure SPA fallback (Opcional si no se usa el Hash)
+      - name: Configure GitHub Pages fallback
+        run: cp ./Client-Angular/dist/uceva-angular-nodejs-taller-client-server/browser/index.html ./Client-Angular/dist/uceva-angular-nodejs-taller-client-server/browser/404.html
+
+      # 8. Subir artefacto generado
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./Client-Angular/dist/uceva-angular-nodejs-taller-client-server/browser
+
+  # Despliegue
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
