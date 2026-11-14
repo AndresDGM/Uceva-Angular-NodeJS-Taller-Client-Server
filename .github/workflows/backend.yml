@@ -40,7 +40,11 @@ jobs:
           IMAGE_TAG: ${{ vars.IMAGE_TAG }}
         run: echo "Variables cargadas correctamente"
 
-      # 3. Configurar Docker Buildx para construcción avanzada de imágenes
+      # 3. Configurar QEMU para compilar imágenes multi-arquitectura (amd64 y arm64)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 4. Configurar Docker Buildx para construcción avanzada de imágenes
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -63,11 +67,12 @@ jobs:
             type=ref,event=tag
             type=sha
 
-      # 6. Construir la imagen desde ./Server-NodeJS y subirla a GHCR
+      # 7. Construir la imagen multi-arquitectura (amd64 y arm64) desde ./Server-NodeJS y subirla a GHCR
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: ./Server-NodeJS
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
