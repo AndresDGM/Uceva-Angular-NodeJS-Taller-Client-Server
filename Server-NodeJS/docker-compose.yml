@@ -1,0 +1,59 @@
+# Configuración de despliegue para el servidor Node.js (Express + TypeScript)
+# Todas las variables ${VAR:-default} se leen desde el archivo .env generado en el deploy
+# o usan su valor por defecto en entornos locales.
+
+services:
+  server:
+    # Imagen Docker publicada en GHCR (IMAGE_AUTOR se inyecta en minúsculas desde el workflow)
+    image: ${IMAGE_AUTOR}/${IMAGE_NAME:-uceva-server-nodejs}:${IMAGE_TAG:-latest}
+
+    # Nombre del contenedor (también usado como prefijo para routers/middlewares de Traefik)
+    container_name: ${CONTAINER_NAME:-uceva-server-nodejs}
+
+    # Reinicia automáticamente ante fallos o reinicios del servidor
+    restart: unless-stopped
+
+    # Mapeo de puertos host:contenedor
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+
+    # Variables de entorno inyectadas al proceso de Node.js
+    environment:
+      PORT: ${PORT:-3000}
+      PUBLIC_PATH: ${PUBLIC_PATH:-public}
+      NODE_ENV: production
+
+    # Redes a las que se conecta el servicio: red interna por defecto + red externa de Traefik
+    networks:
+      - default
+      - traefik-net
+
+    # Etiquetas para enrutamiento automático con Traefik (HTTPS + StripPrefix)
+    labels:
+      # Habilita Traefik para este contenedor
+      - "traefik.enable=true"
+
+      # Red real de Docker que Traefik debe usar para alcanzar el contenedor
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-network}"
+
+      # Regla de acceso: dominio + prefijo de ruta (ej. https://api.aguevaradev.me/apiserver)
+      - "traefik.http.routers.${CONTAINER_NAME:-uceva-server-nodejs}.rule=Host(`${DOMAIN:-localhost}`) && PathPrefix(`/${API_PREFIX:-apiserver}`)"
+
+      # Entrypoint HTTPS y certificado automático con Let's Encrypt
+      - "traefik.http.routers.${CONTAINER_NAME:-uceva-server-nodejs}.entrypoints=websecure"
+      - "traefik.http.routers.${CONTAINER_NAME:-uceva-server-nodejs}.tls.certresolver=letsencrypt"
+
+      # Asocia el middleware StripPrefix al router
+      - "traefik.http.routers.${CONTAINER_NAME:-uceva-server-nodejs}.middlewares=${CONTAINER_NAME:-uceva-server-nodejs}-strip"
+
+      # Elimina el prefijo /${API_PREFIX} antes de reenviar la petición a Express
+      - "traefik.http.middlewares.${CONTAINER_NAME:-uceva-server-nodejs}-strip.stripprefix.prefixes=/${API_PREFIX:-apiserver}"
+
+      # Puerto interno en el que escucha Express dentro del contenedor
+      - "traefik.http.services.${CONTAINER_NAME:-uceva-server-nodejs}.loadbalancer.server.port=${PORT:-3000}"
+
+# Declaración de la red externa compartida con Traefik (debe existir previamente en el servidor)
+networks:
+  traefik-net:
+    name: ${TRAEFIK_NETWORK:-traefik-network}
+    external: true
