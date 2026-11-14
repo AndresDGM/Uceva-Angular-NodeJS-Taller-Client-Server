@@ -27,5 +27,5 @@ export const environment = {
    * `${environment.baseUrl}/users`
    * ```
    */
-  baseUrl: 'https://api.aguevaradev.me/uceva-angular-nodejs-taller-client-server'
+  baseUrl: 'http://localhost:3000'
 };
