@@ -165,3 +165,65 @@ src/app/services/users/
 - En este taller se utilizan componentes standalone
 - Mantener una estructura clara favorece la escalabilidad y mantenibilidad
 - Revisar cobertura de pruebas unitarias y documentación
+
+---
+
+## 🚀 Despliegue (CI/CD y Docker Compose)
+
+El proyecto cuenta con dos flujos de GitHub Actions que se ejecutan automáticamente al hacer `push` a la rama `develop` (o manualmente con `workflow_dispatch`):
+
+- **Frontend (`Client-Angular`):** [`.github/workflows/frontend.yml`](.github/workflows/frontend.yml) ejecuta pruebas unitarias con Jest, compila Angular y despliega en **GitHub Pages**.
+- **Backend (`Server-NodeJS`):** [`.github/workflows/backend.yml`](.github/workflows/backend.yml) construye la imagen Docker, la publica en **GitHub Container Registry (GHCR)** y la despliega por SSH en el servidor remoto usando [`Server-NodeJS/docker-compose.yml`](Server-NodeJS/docker-compose.yml).
+
+### 🔐 Secrets requeridos en GitHub
+
+Configurar en **Settings → Secrets and variables → Actions → Secrets**:
+
+| Secret | Descripción | Ejemplo |
+| :--- | :--- | :--- |
+| `SSH_HOST` | Dirección IP o dominio del servidor remoto | `123.45.67.89` |
+| `SSH_USER` | Usuario SSH con permisos para ejecutar Docker | `ubuntu` |
+| `SSH_PORT` | Puerto del servicio SSH | `22` |
+| `SSH_KEY` | Llave privada SSH completa (incluyendo encabezado y pie) | `-----BEGIN OPENSSH PRIVATE KEY----- ...` |
+
+*(Nota: `GITHUB_TOKEN` es generado automáticamente por GitHub Actions para autenticar con GHCR y GitHub Pages).*
+
+### ⚙️ Variables dinámicas (`vars`) en GitHub
+
+Configurar en **Settings → Secrets and variables → Actions → Variables**:
+
+| Variable | Descripción | Valor por defecto en Compose | Ejemplo |
+| :--- | :--- | :--- | :--- |
+| `IMAGE_NAME` | Nombre de la imagen Docker (en minúsculas) | `uceva-server-nodejs` | `uceva-server-nodejs` |
+| `IMAGE_TAG` | Etiqueta (tag) de la imagen a construir y desplegar | `latest` | `latest` |
+| `CONTAINER_NAME` | Nombre del contenedor y prefijo de routers/middlewares en Traefik | `uceva-server-nodejs` | `uceva-server-nodejs` |
+| `DOMAIN` | Dominio donde Traefik expondrá el servicio | `localhost` | `api.aguevaradev.me` |
+| `TRAEFIK_NETWORK` | Nombre de la red externa de Docker compartida con Traefik | `traefik-network` | `traefik-network` |
+
+### 🐳 Variables dinámicas de `Server-NodeJS/docker-compose.yml`
+
+Durante el despliegue, el workflow genera dinámicamente el archivo `.env` en `Server-NodeJS/` y lo copia junto con `docker-compose.yml` a `~/deployments/${IMAGE_NAME}` en el servidor remoto.
+
+Además de las variables anteriores, el `docker-compose.yml` soporta:
+
+| Variable | Descripción | Valor por defecto |
+| :--- | :--- | :--- |
+| `IMAGE_AUTOR` | Registro y propietario de la imagen en minúsculas (inyectado por el workflow como `ghcr.io/<github.actor>`) | *(vacío)* |
+| `API_PREFIX` | Prefijo de la ruta en Traefik (inyectado automáticamente desde el nombre del repositorio en minúsculas) | `uceva-angular-nodejs-taller-client-server` |
+| `PORT` | Puerto interno y externo del contenedor Express | `3000` |
+| `PUBLIC_PATH` | Carpeta de archivos estáticos servidos por Express | `public` |
+
+#### Funcionamiento de Traefik en el Compose
+
+- **Red externa:** conecta el contenedor a `default` y a la red externa `${TRAEFIK_NETWORK:-traefik-network}` (`traefik-net`).
+- **Enrutamiento (`Host` + `PathPrefix`):** atiende peticiones hacia `https://${DOMAIN}/${API_PREFIX}/...` usando el entrypoint `websecure` y TLS con `letsencrypt`.
+- **StripPrefix:** elimina `/${API_PREFIX}` antes de reenviar la petición al puerto `${PORT:-3000}` del contenedor Node.js.
+
+#### Comandos útiles en el servidor
+
+```bash
+cd ~/deployments/<IMAGE_NAME>
+docker compose ps
+docker compose logs -f
+docker compose pull && docker compose up -d
+```
