@@ -46,16 +46,24 @@ jobs:
         working-directory: ./Client-Angular
         run: npm test
 
-      # 6. Generar build de Angular
+      # 6. Configurar environment.ts con la URL del backend desde vars/repo
+      - name: Configure environment URL
+        working-directory: ./Client-Angular
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
+          API_PREFIX: ${{ github.event.repository.name }}
+        run: npm run set-env
+
+      # 7. Generar build de Angular
       - name: Build Angular
         working-directory: ./Client-Angular
         run: npm run build -- --base-href "/${{ github.event.repository.name }}/"
         
-      # 7. Configure SPA fallback (Opcional si no se usa el Hash)
+      # 8. Configure SPA fallback (Opcional si no se usa el Hash)
       - name: Configure GitHub Pages fallback
         run: cp ./Client-Angular/dist/uceva-angular-nodejs-taller-client-server/browser/index.html ./Client-Angular/dist/uceva-angular-nodejs-taller-client-server/browser/404.html
 
-      # 8. Subir artefacto generado
+      # 9. Subir artefacto generado
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
