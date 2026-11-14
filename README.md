@@ -199,6 +199,7 @@ Configurar en **Settings → Secrets and variables → Actions → Variables**:
 | `CONTAINER_NAME` | Nombre del contenedor y prefijo de routers/middlewares en Traefik | `uceva-server-nodejs` | `uceva-server-nodejs` |
 | `DOMAIN` | Dominio donde Traefik expondrá el servicio | `localhost` | `api.aguevaradev.me` |
 | `TRAEFIK_NETWORK` | Nombre de la red externa de Docker compartida con Traefik | `traefik-network` | `traefik-network` |
+| `PORT` | Puerto del servidor Express y mapeo del contenedor | `3000` | `3001` |
 
 ### 🐳 Variables dinámicas de `Server-NodeJS/docker-compose.yml`
 
@@ -210,7 +211,6 @@ Además de las variables anteriores, el `docker-compose.yml` soporta:
 | :--- | :--- | :--- |
 | `IMAGE_AUTOR` | Registro y propietario de la imagen en minúsculas (inyectado por el workflow como `ghcr.io/<github.actor>`) | *(vacío)* |
 | `API_PREFIX` | Prefijo de la ruta en Traefik (inyectado automáticamente desde el nombre del repositorio en minúsculas) | `uceva-angular-nodejs-taller-client-server` |
-| `PORT` | Puerto interno y externo del contenedor Express | `3000` |
 | `PUBLIC_PATH` | Carpeta de archivos estáticos servidos por Express | `public` |
 
 #### Funcionamiento de Traefik en el Compose

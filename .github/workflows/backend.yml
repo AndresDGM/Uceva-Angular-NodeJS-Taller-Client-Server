@@ -97,6 +97,7 @@ jobs:
       DOMAIN: ${{ vars.DOMAIN }}
       API_PREFIX: ${{ github.event.repository.name }}
       TRAEFIK_NETWORK: ${{ vars.TRAEFIK_NETWORK }}
+      PORT: ${{ vars.PORT }}
       IMAGE_AUTOR: ghcr.io/${{ github.actor }}
 
     steps:
@@ -116,6 +117,7 @@ jobs:
           echo "DOMAIN=$DOMAIN" >> .env
           echo "API_PREFIX=${API_PREFIX,,}" >> .env
           echo "TRAEFIK_NETWORK=$TRAEFIK_NETWORK" >> .env
+          echo "PORT=${PORT:-3000}" >> .env
           echo "" >> .env
           echo "Variables cargadas correctamente"
 
