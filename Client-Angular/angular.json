@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Angular-Standalone-Template": {
+    "uceva-angular-nodejs-taller-client-server": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -66,10 +66,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Angular-Standalone-Template:build:production"
+              "buildTarget": "uceva-angular-nodejs-taller-client-server:build:production"
             },
             "development": {
-              "buildTarget": "Angular-Standalone-Template:build:development"
+              "buildTarget": "uceva-angular-nodejs-taller-client-server:build:development"
             }
           },
           "defaultConfiguration": "development"
