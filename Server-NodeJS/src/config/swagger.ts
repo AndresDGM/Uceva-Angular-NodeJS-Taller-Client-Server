@@ -1,4 +1,21 @@
 import swaggerJsdoc from 'swagger-jsdoc';
+import { envs } from './envs';
+
+const cleanPrefix = envs.API_PREFIX.replace(/^\/+|\/+$/g, '');
+const productionServerUrl =
+  envs.DOMAIN && envs.DOMAIN !== 'localhost'
+    ? `https://${envs.DOMAIN}${cleanPrefix ? `/${cleanPrefix}` : ''}`
+    : null;
+
+const servers = [
+  ...(productionServerUrl
+    ? [{ url: productionServerUrl, description: 'Servidor de producción' }]
+    : []),
+  {
+    url: `http://localhost:${envs.PORT}`,
+    description: 'Servidor local',
+  },
+];
 
 /**
  * Especificación de Swagger (OpenAPI) para la API.
@@ -26,11 +43,7 @@ export const swaggerSpec = swaggerJsdoc({
       version: '1.0.0',
       description: 'Documentación de la API con Swagger',
     },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-      },
-    ],
+    servers,
   },
   apis: [
     './src/presentation/modules/**/*.routes.ts', // donde están tus comentarios

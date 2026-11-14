@@ -21,6 +21,8 @@ services:
     environment:
       PORT: ${PORT:-3000}
       PUBLIC_PATH: ${PUBLIC_PATH:-public}
+      DOMAIN: ${DOMAIN:-}
+      API_PREFIX: ${API_PREFIX:-}
       NODE_ENV: production
 
     # Redes a las que se conecta el servicio: red interna por defecto + red externa de Traefik
